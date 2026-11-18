@@ -1,15 +1,19 @@
+import os
 import streamlit as st
 import pandas as pd
 import requests
 from scipy.sparse import load_npz
 
+# Key comes from Streamlit secrets or the environment, never from the code.
+API_KEY = st.secrets.get('TMDB_API_KEY', os.environ.get('TMDB_API_KEY', ''))
+
 def fetch_poster(movie_id):
-    response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key=3523854faccab32db9b8b8d4e835f54a&language=en-US'.format(movie_id))
+    response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key={}&language=en-US'.format(movie_id, API_KEY))
     data = response.json()
     return "https://image.tmdb.org/t/p/w500/" + data['poster_path']
 
 def fetch_description(movie_id):
-    response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key=3523854faccab32db9b8b8d4e835f54a&language=en-US'.format(movie_id))
+    response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key={}&language=en-US'.format(movie_id, API_KEY))
     data = response.json()
     return data['overview']
 
@@ -62,13 +66,13 @@ if st.button('Recommend'):
 # import requests
 #
 # def fetch_poster(movie_id):
-#     response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key=3523854faccab32db9b8b8d4e835f54a&language=en-US'.format(movie_id))
+#     response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key={}&language=en-US'.format(movie_id, API_KEY))
 #     data = response.json()
 #
 #     return "https://image.tmdb.org/t/p/w500/" + data['poster_path']
 #
 # def fetch_description(movie_id):
-#     response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key=3523854faccab32db9b8b8d4e835f54a&language=en-US'.format(movie_id))
+#     response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key={}&language=en-US'.format(movie_id, API_KEY))
 #     data = response.json()
 #
 #     return data['overview']
